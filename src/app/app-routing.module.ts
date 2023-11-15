@@ -17,10 +17,7 @@ const routes: Routes = [
     path: 'password-reset',
     loadChildren: () => import('./password-reset/password-reset.module').then( m => m.PasswordResetPageModule)
   },
-  {
-    path: 'foto',
-    loadChildren: () => import('./foto/foto.module').then( m => m.FotoPageModule)
-  },
+
   /* {
     path: 'recuperar-clave',
     loadChildren: () => import('./recuperar-clave/recuperar-clave.module').then( m => m.RecuperarClavePageModule)
