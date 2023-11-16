@@ -18,10 +18,7 @@ const routes: Routes = [
     loadChildren: () => import('./password-reset/password-reset.module').then( m => m.PasswordResetPageModule)
   },
 
-  /* {
-    path: 'recuperar-clave',
-    loadChildren: () => import('./recuperar-clave/recuperar-clave.module').then( m => m.RecuperarClavePageModule)
-  }, */
+
 ];
 
 @NgModule({
