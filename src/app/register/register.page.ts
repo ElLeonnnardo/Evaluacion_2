@@ -66,15 +66,6 @@ export class RegisterPage {
     );
   }
 
-/*   obtenerComunas(){
-    this.datosComunalesService.obtenerComunas(region.id).subscribe((data)=>{
-        this.comuna = data;
-      },
-      (error)=>{
-        console.error('Error no se pueden obtener las comunas: ', error);
-      }
-    );
-  } */
 
   obtenerComunas(){
     this.datosComunalesService.obtenerComunas().subscribe((data)=>{
