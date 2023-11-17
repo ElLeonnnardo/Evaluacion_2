@@ -6,16 +6,18 @@ import { RegisterComponent } from './register/register.component';
 import { LeerQrComponent } from './leer-qr/leer-qr.component';
 import { RegistroClaseComponent } from './registro-clase/registro-clase.component';
 import { PasswordResetPage } from './password-reset/password-reset.page';
+import { RutaProtegidaComponent } from './ruta-protegida/ruta-protegida.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: '', pathMatch: 'full' },
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule) },
   { path: 'register', loadChildren: () => import('./register/register.module').then(m => m.RegisterPageModule) },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'password-reset', component: PasswordResetPage },
-  { path: 'leer-qr', component: LeerQrComponent, canActivate: [AuthGuard] },
+/*   { path: 'leer-qr', component: LeerQrComponent, canActivate: [AuthGuard] },
   { path: 'registro-clase', component: RegistroClaseComponent, canActivate: [AuthGuard] },
+  { path: 'ruta-protegida', component: RutaProtegidaComponent, canActivate: [AuthGuard] }, */
   {
     path: 'leer-qr',
     loadChildren: () => import('./leer-qr/leer-qr.module').then( m => m.LeerQRPageModule)
@@ -46,3 +48,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+

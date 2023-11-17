@@ -1,41 +1,30 @@
+// api.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiResponse } from '../types';
 import { catchError } from 'rxjs/operators';
+import { ApiResponse } from './types'; 
 
 @Injectable({
   providedIn: 'root'
 })
-export class DatosRegionalesService {
-
+export class ApiService {
   private apiUrl = 'https://dev.matiivilla.cl/duoc/location';
 
   constructor(private http: HttpClient) {}
 
-  obtenerRegiones(): Observable<ApiResponse<any[]>> {
+  getRegiones(): Observable<ApiResponse<any[]>> {
     return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/region`)
       .pipe(
         catchError(error => {
           console.error('Error al obtener regiones', error);
           throw error;
-        }));
-      }
-    }
+        })
+      );
+  }
 
-
-
-@Injectable({
-  providedIn: 'root'
-})
-export class DatosComunalesService {
-
-  private apiUrl = 'https://dev.matiivilla.cl/duoc/location';
-
-  constructor(private http: HttpClient) {}
-
-  obtenerComunas(regionId: number): Observable<ApiResponse<any[]>> {
-    return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/comuna/7`)
+  getComunasByRegion(regionId: number): Observable<ApiResponse<any[]>> {
+    return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/comuna/?regionId=${regionId}`)
       .pipe(
         catchError(error => {
           console.error('Error al obtener comunas', error);

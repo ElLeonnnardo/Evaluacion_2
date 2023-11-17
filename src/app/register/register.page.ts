@@ -4,17 +4,30 @@ import { Preferences } from '@capacitor/preferences';
 import { HttpClient } from '@angular/common/http';
 import { DatosRegionalesService } from 'src/app/services/location.service';
 import { DatosComunalesService } from 'src/app/services/location.service';
+import { ApiService } from '../api.service';
 
+interface Region {
+  id: number;
+  nombre: string;
+}
 
-  @Component({
+interface Comuna {
+  id: number;
+  nombre: string;
+}
+
+@Component({
   selector: 'app-register',
   templateUrl: 'register.page.html',
   styleUrls: ['register.page.scss'],
 })
 export class RegisterPage {
+  selectedRegionId: number = 0;
   region: any;
+  id: number = 0;
+  regiones: Region[] = [];
+  comunas: Comuna[] = [];
   comuna: any;
-  comunas: any[] = [];
   regionSeleccionada: number = 0;
   comunaSeleccionada: number = 0;
   filtroComuna: string = '';
@@ -25,15 +38,22 @@ export class RegisterPage {
   usuario: string;
   contrasena: string;
   repetirContrasena: string;
-  RegionId: number = 0;
   regionId: number = 0;
+  comunaId: number= 0;
   selectedComunaId: any;
   NombreRegion: string = '';
   ComunaId: number = 0;
   NombreComuna: string = '';
   http: any;
 
-  constructor(private navCtrl: NavController, private httpClient: HttpClient, private datosRegionalesService: DatosRegionalesService, private datosComunalesService: DatosComunalesService) {
+  constructor(
+    private navCtrl: NavController,
+    private httpClient: HttpClient,
+    private datosRegionalesService: DatosRegionalesService,
+    private datosComunalesService: DatosComunalesService,
+    private apiService: ApiService,
+
+  ) {
     this.nombre = '';
     this.apellido = '';
     this.rut = '';
@@ -47,15 +67,11 @@ export class RegisterPage {
     this.navCtrl.back();
   }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.obtenerRegiones();
     this.obtenerComunas();
   }
-
-  ionViewWillEnter() {
-    this.obtenerRegiones();
-  }
-
+  
   obtenerRegiones(){
     this.datosRegionalesService.obtenerRegiones().subscribe((data)=>{
         this.region = data.data;
@@ -65,10 +81,9 @@ export class RegisterPage {
       }
     );
   }
-
-
+  
   obtenerComunas(){
-    this.datosComunalesService.obtenerComunas().subscribe((data)=>{
+    this.datosComunalesService.obtenerComunas(this.regionId).subscribe((data)=>{
         this.comuna = data.data;
       },
       (error)=>{
@@ -87,7 +102,7 @@ export class RegisterPage {
       this.region && this.region.length > 0,
       this.comuna && this.comuna.length > 0,
     ];
-    return validations.every(valid => valid === true);
+    return validations.every((valid) => valid === true);
   }
 
   async register() {
@@ -95,7 +110,6 @@ export class RegisterPage {
       alert('Las contraseñas no coinciden');
       return;
     }
-
     const userData = {
       nombre: this.nombre,
       apellido: this.apellido,
@@ -105,16 +119,15 @@ export class RegisterPage {
       contrasena: this.contrasena,
       region: this.NombreRegion,
       comuna: this.NombreComuna,
-      RegionId: this.RegionId,
+      regionId: this.regionId,
+      comunaIdd: this.comunaId,
       ComunaId: this.ComunaId,
     };
-
     try {
       await Preferences.set({
         key: 'userData',
         value: JSON.stringify(userData),
       });
-
       alert('Registro exitoso. Puede iniciar sesión.');
       this.navCtrl.navigateForward('/login');
     } catch (error) {
@@ -123,7 +136,7 @@ export class RegisterPage {
   }
 
   onRegionChange() {
-    const NombreRegion = this.region.find((region: { id: any; }) => region.id === this.regionId);
+    const NombreRegion = this.region.find((region: { id: any }) => region.id === this.regionId);
     this.selectedComunaId = null;
     if (NombreRegion) {
       this.NombreRegion = NombreRegion.nombre;
@@ -131,7 +144,7 @@ export class RegisterPage {
   }
 
   onComunaChange() {
-    const NombreComuna = this.comuna.find((comuna: { id: any; }) => comuna.id === this.ComunaId);
+    const NombreComuna = this.comuna.find((comuna: { id: any }) => comuna.id === this.ComunaId);
     this.selectedComunaId = null;
     if (NombreComuna) {
       this.NombreComuna = NombreComuna.nombre;
@@ -149,4 +162,4 @@ export class RegisterPage {
   login() {
     this.navCtrl.navigateForward('/login');
   }
-}
+} 

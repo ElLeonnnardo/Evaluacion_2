@@ -47,8 +47,7 @@
 
     <ion-item>
       <ion-label>Región</ion-label>
-      <ion-select [(ngModel)]="NombreRegion" (ionChange)="onRegionChange()">
-        <ion-select-option value="0">Selecciona una región</ion-select-option>
+      <ion-select [(ngModel)]="NombreRegion" (ionChange)="obtenerRegiones()">
         <ion-select-option *ngFor="let region of region" [value]="region.nombre">{{ region.nombre }}</ion-select-option>
       </ion-select>
     </ion-item>
@@ -59,13 +58,13 @@
         <ion-select-option value="0">Selecciona una comuna</ion-select-option>
         <ion-select-option *ngFor="let comuna of comuna" [value]="comuna.nombre">{{ comuna.nombre }}</ion-select-option>
       </ion-select>
-    </ion-item>
-
+    </ion-item> 
 
     <ion-content>
       <ion-item>
         <ion-label>Usuario</ion-label>
-        <ion-input [(ngModel)]="usuario"></ion-input>
+        <ion-input [(ngModel)]="usuario" required minlength="4"  ></ion-input>
+        
       </ion-item>
 
       <ion-item>
